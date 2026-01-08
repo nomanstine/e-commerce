@@ -3,57 +3,46 @@
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { Package, Shield, Truck, HeadphonesIcon, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  images: string[];
+  category: string;
+  description: string;
+  stock: number;
+  tags: string[];
+}
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const featuredProducts = [
-    {
-      id: 1,
-      name: 'Vintage Brass Lamp',
-      price: 8500,
-      image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=500',
-      category: 'Lighting',
-      badge: 'Bestseller'
-    },
-    {
-      id: 2,
-      name: 'Antique Wooden Cabinet',
-      price: 45000,
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=500',
-      category: 'Furniture',
-      badge: 'New Arrival'
-    },
-    {
-      id: 3,
-      name: 'Traditional Brass Pottery',
-      price: 3200,
-      image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=500',
-      category: 'Decor'
-    },
-    {
-      id: 4,
-      name: 'Vintage Photo Frame',
-      price: 2800,
-      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=500',
-      category: 'Decor'
-    },
-    {
-      id: 5,
-      name: 'Antique Mirror',
-      price: 15000,
-      image: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=500',
-      category: 'Decor',
-      badge: 'Limited'
-    },
-    {
-      id: 6,
-      name: 'Classic Wall Clock',
-      price: 6500,
-      image: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=500',
-      category: 'Decor'
-    }
-  ];
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/products');
+        setFeaturedProducts(response.data.slice(0, 6)); // Get first 6 products
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const getBadge = (tags: string[]) => {
+    if (tags.includes('bestseller')) return 'Bestseller';
+    if (tags.includes('new arrival')) return 'New Arrival';
+    if (tags.includes('limited')) return 'Limited';
+    return undefined;
+  };
 
   const categories = [
     { name: 'Furniture', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400', count: 45 },
@@ -224,11 +213,28 @@ export default function Home() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-amber-900 mb-2 sm:mb-4">Featured Collection</h2>
             <p className="text-sm sm:text-base text-gray-600">Handpicked antiques for discerning collectors</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-amber-900"></div>
+              <p className="mt-4 text-amber-700">Loading products...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+              {featuredProducts.map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.images[0],
+                    category: product.category,
+                    badge: getBadge(product.tags)
+                  }} 
+                />
+              ))}
+            </div>
+          )}
           <div className="text-center mt-8 sm:mt-12">
             <Link href="/shop" className="inline-block bg-amber-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-800 transition shadow-lg text-sm sm:text-base">
               View All Products

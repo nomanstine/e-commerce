@@ -1,59 +1,105 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, use } from 'react';
+import { useState, useEffect, use } from 'react';
 import { Heart, ShoppingCart, Share2, Star, Truck, Shield, Package, Clock, ChevronLeft, ChevronRight, Minus, Plus, Check } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
+import axios from 'axios';
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  category: string;
+  description: string;
+  images: string[];
+  inStock: boolean;
+  sku: string;
+  features?: string[];
+  specifications?: Record<string, string>;
+  shipping?: {
+    standard?: string;
+    express?: string;
+    returns?: string;
+  };
+}
+
+interface Review {
+  id: number;
+  productId: number;
+  author: string;
+  rating: number;
+  comment: string;
+  verified: boolean;
+  date: string;
+}
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
-  // Mock product data
-  const product = {
-    id: id,
-    name: 'Vintage Brass Lamp',
-    price: 8500,
-    originalPrice: 12000,
-    category: 'Lighting',
-    rating: 4.8,
-    reviews: 124,
-    inStock: true,
-    sku: 'VBL-2024-001',
-    images: [
-      'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800',
-      'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800',
-      'https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=800',
-      'https://images.unsplash.com/photo-1550985616-10810253b84d?w=800'
-    ],
-    description: 'Exquisite vintage brass lamp from the early 1900s, handcrafted by master artisans in Old Dhaka. This stunning piece features intricate floral motifs and traditional Bengali patterns that reflect the rich cultural heritage of Bangladesh. The lamp has been carefully restored to preserve its authentic charm while ensuring functionality for modern use.',
-    features: [
-      'Authentic early 20th century design',
-      'Hand-hammered brass construction',
-      'Traditional Bengali floral patterns',
-      'Fully restored and functional',
-      'Original patina preserved',
-      'Comes with authentication certificate'
-    ],
-    specifications: {
-      'Era': 'Early 1900s',
-      'Origin': 'Old Dhaka, Bangladesh',
-      'Material': 'Solid Brass',
-      'Height': '45 cm',
-      'Width': '25 cm',
-      'Weight': '3.2 kg',
-      'Condition': 'Excellent (Restored)',
-      'Style': 'Traditional Bengali'
-    },
-    shipping: {
-      standard: 'Free delivery in 3-5 business days',
-      express: '৳500 - Next day delivery available',
-      returns: '7-day return policy'
+  useEffect(() => {
+    fetchProduct();
+    fetchReviews();
+  }, [id]);
+
+  const fetchProduct = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:8000/api/products/${id}`);
+      setProduct(response.data);
+      setError(null);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      setError('Failed to load product');
+    } finally {
+      setLoading(false);
     }
   };
 
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/products/${id}/reviews`);
+      setReviews(response.data);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error || 'Product not found'}</p>
+          <Link href="/" className="text-amber-900 hover:underline">Return to Home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const productRating = reviews.length > 0 
+    ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length 
+    : 4.8;
+  const productReviews = reviews.length;
+  
   const relatedProducts = [
     {
       id: 2,
@@ -76,33 +122,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       price: 2800,
       image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=500',
       category: 'Decor'
-    }
-  ];
-
-  const reviews = [
-    {
-      id: 1,
-      author: 'Ahmed Hassan',
-      rating: 5,
-      date: 'December 28, 2025',
-      comment: 'Absolutely stunning piece! The craftsmanship is incredible. Perfect addition to my living room.',
-      verified: true
-    },
-    {
-      id: 2,
-      author: 'Nadia Rahman',
-      rating: 5,
-      date: 'December 15, 2025',
-      comment: 'Beautiful antique lamp with authentic Bengali design. Fast delivery and well-packaged.',
-      verified: true
-    },
-    {
-      id: 3,
-      author: 'Karim Sheikh',
-      rating: 4,
-      date: 'November 30, 2025',
-      comment: 'Great quality and condition. Minor restoration marks but adds to the character.',
-      verified: true
     }
   ];
 
@@ -131,7 +150,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             {/* Main Image */}
             <div className="relative aspect-square bg-amber-50 rounded-lg sm:rounded-xl overflow-hidden shadow-lg">
               <img 
-                src={product.images[selectedImage]} 
+                src={product.images[selectedImage] || 'https://via.placeholder.com/800'} 
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
@@ -140,7 +159,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </button>
               
               {/* Navigation Arrows */}
-              {product.images.length > 1 && (
+              {product.images && product.images.length > 1 && (
                 <>
                   <button 
                     onClick={() => setSelectedImage((prev) => (prev > 0 ? prev - 1 : product.images.length - 1))}
@@ -160,7 +179,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
             {/* Thumbnail Gallery */}
             <div className="grid grid-cols-4 gap-2 sm:gap-4">
-              {product.images.map((image, index) => (
+              {product.images && product.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -200,12 +219,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 {[...Array(5)].map((_, i) => (
                   <Star 
                     key={i} 
-                    className={`w-4 h-4 sm:w-5 sm:h-5 ${i < Math.floor(product.rating) ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
+                    className={`w-4 h-4 sm:w-5 sm:h-5 ${i < Math.floor(productRating) ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
                   />
                 ))}
               </div>
               <span className="text-sm sm:text-base text-gray-600">
-                {product.rating} ({product.reviews} reviews)
+                {productRating} ({productReviews} reviews)
               </span>
             </div>
 
@@ -276,8 +295,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               <div className="flex items-start space-x-3">
                 <Truck className="w-5 h-5 text-amber-900 mt-1 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-sm sm:text-base text-gray-800">{product.shipping.standard}</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.shipping.express}</p>
+                  <p className="font-semibold text-sm sm:text-base text-gray-800">{product.shipping?.standard || 'Standard delivery available'}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.shipping?.express || 'Express delivery available'}</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -291,7 +310,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 <Package className="w-5 h-5 text-amber-900 mt-1 flex-shrink-0" />
                 <div>
                   <p className="font-semibold text-sm sm:text-base text-gray-800">Easy Returns</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.shipping.returns}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.shipping?.returns || 'Returns available'}</p>
                 </div>
               </div>
             </div>
@@ -325,7 +344,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   activeTab === 'reviews' ? 'border-b-2 border-amber-900 text-amber-900' : 'text-gray-600 hover:text-amber-900'
                 }`}
               >
-                Reviews ({product.reviews})
+                Reviews ({productReviews})
               </button>
             </div>
           </div>
@@ -346,14 +365,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   <h4 className="text-lg sm:text-xl font-serif font-bold text-amber-900 mb-3 sm:mb-4">
                     Key Features
                   </h4>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {product.features.map((feature, index) => (
-                      <li key={index} className="flex items-start space-x-3">
-                        <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm sm:text-base text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {product.features && product.features.length > 0 ? (
+                    <ul className="space-y-2 sm:space-y-3">
+                      {product.features.map((feature, index) => (
+                        <li key={index} className="flex items-start space-x-3">
+                          <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm sm:text-base text-gray-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-500 text-sm">No features available</p>
+                  )}
                 </div>
               </div>
             )}
@@ -363,14 +386,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 <h3 className="text-xl sm:text-2xl font-serif font-bold text-amber-900 mb-4 sm:mb-6">
                   Product Specifications
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {Object.entries(product.specifications).map(([key, value]) => (
-                    <div key={key} className="border-b border-gray-200 pb-3">
-                      <dt className="text-xs sm:text-sm font-semibold text-gray-600 mb-1">{key}</dt>
-                      <dd className="text-sm sm:text-base text-gray-900">{value}</dd>
-                    </div>
-                  ))}
-                </div>
+                {product.specifications && Object.keys(product.specifications).length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    {Object.entries(product.specifications).map(([key, value]) => (
+                      <div key={key} className="border-b border-gray-200 pb-3">
+                        <dt className="text-xs sm:text-sm font-semibold text-gray-600 mb-1">{key}</dt>
+                        <dd className="text-sm sm:text-base text-gray-900">{value}</dd>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No specifications available</p>
+                )}
               </div>
             )}
 
@@ -387,13 +414,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                         {[...Array(5)].map((_, i) => (
                           <Star 
                             key={i} 
-                            className={`w-4 h-4 sm:w-5 sm:h-5 ${i < Math.floor(product.rating) ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
+                            className={`w-4 h-4 sm:w-5 sm:h-5 ${i < Math.floor(productRating) ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
                           />
                         ))}
                       </div>
-                      <span className="text-base sm:text-lg font-semibold">{product.rating} out of 5</span>
+                      <span className="text-base sm:text-lg font-semibold">{productRating} out of 5</span>
                     </div>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">Based on {product.reviews} reviews</p>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">Based on {productReviews} reviews</p>
                   </div>
                   <button className="bg-amber-900 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-amber-800 transition text-sm sm:text-base">
                     Write a Review
@@ -402,33 +429,39 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
                 {/* Individual Reviews */}
                 <div className="space-y-4 sm:space-y-6">
-                  {reviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-200 pb-4 sm:pb-6 last:border-0">
-                      <div className="flex items-start justify-between mb-2 sm:mb-3">
-                        <div>
-                          <div className="flex items-center space-x-2 mb-1">
-                            <span className="font-semibold text-sm sm:text-base text-gray-900">{review.author}</span>
-                            {review.verified && (
-                              <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full flex items-center">
-                                <Check className="w-3 h-3 mr-1" />
-                                Verified
-                              </span>
-                            )}
+                  {reviews.length > 0 ? (
+                    reviews.map((review) => (
+                      <div key={review.id} className="border-b border-gray-200 pb-4 sm:pb-6 last:border-0">
+                        <div className="flex items-start justify-between mb-2 sm:mb-3">
+                          <div>
+                            <div className="flex items-center space-x-2 mb-1">
+                              <span className="font-semibold text-sm sm:text-base text-gray-900">{review.author}</span>
+                              {review.verified && (
+                                <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full flex items-center">
+                                  <Check className="w-3 h-3 mr-1" />
+                                  Verified
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, i) => (
+                                <Star 
+                                  key={i} 
+                                  className={`w-3 h-3 sm:w-4 sm:h-4 ${i < review.rating ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
+                                />
+                              ))}
+                            </div>
                           </div>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`w-3 h-3 sm:w-4 sm:h-4 ${i < review.rating ? 'fill-amber-500 text-amber-500' : 'text-gray-300'}`}
-                              />
-                            ))}
-                          </div>
+                          <span className="text-xs sm:text-sm text-gray-500">{new Date(review.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                         </div>
-                        <span className="text-xs sm:text-sm text-gray-500">{review.date}</span>
+                        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{review.comment}</p>
                       </div>
-                      <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{review.comment}</p>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 text-sm sm:text-base">No reviews yet. Be the first to review this product!</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             )}
