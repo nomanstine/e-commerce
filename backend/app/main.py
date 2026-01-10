@@ -6,6 +6,7 @@ from db import engine
 
 from datetime import datetime
 import json
+import os
 
 from models import Product, Review, SettingsDB
 from routers import products, reviews, settings
@@ -17,7 +18,7 @@ app = FastAPI(title="E-Commerce API")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js dev server
+    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],  # Next.js dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
