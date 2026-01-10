@@ -31,14 +31,15 @@ def create_review(product_id: int, review_data: ReviewCreate, session: Session =
     if not product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
     
-    review_dict = review_data.model_dump()
+    review_dict = review_data.model_dump(exclude_unset=True)
     review_dict["product_id"] = product_id
-    review = Review.model_validate(review_dict)
-    session.add(review)
-    session.commit()
-    session.refresh(review)
-    return review
+    
+    reviews = Review.model_validate(review_dict)
 
+    session.add(reviews)
+    session.commit()
+    session.refresh(reviews)
+    return reviews
 
 @router.delete("/api/reviews/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_review(review_id: int, session: Session = Depends(get_session)):

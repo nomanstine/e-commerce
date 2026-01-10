@@ -36,7 +36,9 @@ def create_product(product_data: ProductCreate, session: Session = Depends(get_s
     if existing:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="SKU already exists")
     
-    product = Product.model_validate(product_data.model_dump())
+    product_dict = product_data.model_dump()
+    product = Product.model_validate(product_dict)
+    
     session.add(product)
     session.commit()
     session.refresh(product)
@@ -49,7 +51,8 @@ def update_product(product_id: int, product_data: ProductUpdate, session: Sessio
     if not product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
     
-    product.sqlmodel_update(product_data.model_dump(exclude_unset=True))
+    product_dict = product_data.model_dump(exclude_unset=True)
+    product.sqlmodel_update(product_dict)
     
     session.commit()
     session.refresh(product)

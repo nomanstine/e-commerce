@@ -27,7 +27,8 @@ def update_settings(settings_data: SettingsUpdate, session: Session = Depends(ge
     if not settings:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Settings not found")
     
-    settings.sqlmodel_update(settings_data.model_dump(exclude_unset=True))
+    settings_dict = settings_data.model_dump(exclude_unset=True)
+    settings.sqlmodel_update(settings_dict)
     
     session.commit()
     session.refresh(settings)

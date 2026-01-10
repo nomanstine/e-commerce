@@ -2,10 +2,7 @@
 
 import { useState } from 'react';
 import { Upload, Settings, Package, BarChart3 } from 'lucide-react';
-import ProductUpload from '@/components/admin/ProductUpload';
-import ProductList from '@/components/admin/ProductList';
-import SettingsPanel from '@/components/admin/SettingsPanel';
-import DashboardStats from '@/components/admin/DashboardStats';
+import { ProductUpload, ProductList, SettingsPanel, DashboardStats } from '@/components/dashboard';
 
 type TabType = 'overview' | 'upload' | 'products' | 'settings';
 

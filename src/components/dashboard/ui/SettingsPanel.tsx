@@ -47,17 +47,17 @@ export default function SettingsPanel() {
       const response = await axios.get('http://localhost:8000/api/settings');
       const data = response.data;
       setSettings({
-        storeName: data.storeName,
-        storeDescription: data.storeDescription,
+        storeName: data.store_name,
+        storeDescription: data.store_description,
         currency: data.currency,
-        taxRate: data.taxRate.toString(),
-        shippingFee: data.shippingFee.toString(),
-        freeShippingThreshold: data.freeShippingThreshold.toString(),
-        contactEmail: data.contactEmail,
-        contactPhone: data.contactPhone || '',
-        storeAddress: data.storeAddress || '',
-        returnPolicy: data.returnPolicy || '',
-        termsAndConditions: data.termsAndConditions || '',
+        taxRate: data.tax_rate.toString(),
+        shippingFee: data.shipping_fee.toString(),
+        freeShippingThreshold: data.free_shipping_threshold.toString(),
+        contactEmail: data.contact_email,
+        contactPhone: data.contact_phone || '',
+        storeAddress: data.store_address || '',
+        returnPolicy: data.return_policy || '',
+        termsAndConditions: data.terms_and_conditions || '',
       });
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -77,17 +77,17 @@ export default function SettingsPanel() {
 
     try {
       const settingsData = {
-        storeName: settings.storeName,
-        storeDescription: settings.storeDescription,
+        store_name: settings.storeName,
+        store_description: settings.storeDescription,
         currency: settings.currency,
-        taxRate: parseFloat(settings.taxRate),
-        shippingFee: parseFloat(settings.shippingFee),
-        freeShippingThreshold: parseFloat(settings.freeShippingThreshold),
-        contactEmail: settings.contactEmail,
-        contactPhone: settings.contactPhone,
-        storeAddress: settings.storeAddress,
-        returnPolicy: settings.returnPolicy,
-        termsAndConditions: settings.termsAndConditions,
+        tax_rate: parseFloat(settings.taxRate),
+        shipping_fee: parseFloat(settings.shippingFee),
+        free_shipping_threshold: parseFloat(settings.freeShippingThreshold),
+        contact_email: settings.contactEmail,
+        contact_phone: settings.contactPhone,
+        store_address: settings.storeAddress,
+        return_policy: settings.returnPolicy,
+        terms_and_conditions: settings.termsAndConditions,
       };
 
       await axios.put('http://localhost:8000/api/settings', settingsData);
