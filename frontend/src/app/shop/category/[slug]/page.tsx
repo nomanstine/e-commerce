@@ -26,7 +26,7 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products');
+        const response = await axios.get('/api/products');
         // Filter products by category (convert slug back to category name)
         const categoryName = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         const filteredProducts = response.data.filter((product: Product) =>

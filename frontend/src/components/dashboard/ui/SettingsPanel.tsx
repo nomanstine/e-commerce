@@ -44,7 +44,7 @@ export default function SettingsPanel() {
 
   const fetchSettings = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/settings');
+      const response = await axios.get('/api/settings');
       const data = response.data;
       setSettings({
         storeName: data.store_name,
@@ -90,7 +90,7 @@ export default function SettingsPanel() {
         terms_and_conditions: settings.termsAndConditions,
       };
 
-      await axios.put('http://localhost:8000/api/settings', settingsData);
+      await axios.put('/api/settings', settingsData);
       
       setMessage({ type: 'success', text: 'Settings saved successfully!' });
       setTimeout(() => setMessage(null), 3000);

@@ -77,7 +77,7 @@ export default function AdminProductDetailPage({ params }: { params: Promise<{ i
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/products/${id}`);
+      const response = await axios.get(`/api/products/${id}`);
       const data = response.data;
       setProduct({
         id: data.id || id,
@@ -105,7 +105,7 @@ export default function AdminProductDetailPage({ params }: { params: Promise<{ i
 
   const fetchSettings = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/settings');
+      const response = await axios.get('/api/settings');
       setSettings(response.data);
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -195,7 +195,7 @@ export default function AdminProductDetailPage({ params }: { params: Promise<{ i
         shipping: product.shipping || {},
       };
       
-      await axios.put(`http://localhost:8000/api/products/${id}`, apiData);
+      await axios.put(`/api/products/${id}`, apiData);
       setMessage({ type: 'success', text: 'Product updated successfully!' });
       setTimeout(() => router.push('/dashboard'), 2000);
     } catch (error) {
@@ -211,7 +211,7 @@ export default function AdminProductDetailPage({ params }: { params: Promise<{ i
     
     setDeleting(true);
     try {
-      await axios.delete(`http://localhost:8000/api/products/${id}`);
+      await axios.delete(`/api/products/${id}`);
       setMessage({ type: 'success', text: 'Product deleted!' });
       setTimeout(() => router.push('/dashboard'), 1000);
     } catch (error) {
@@ -237,7 +237,7 @@ export default function AdminProductDetailPage({ params }: { params: Promise<{ i
     if (!settings) return;
     setLoading(true);
     try {
-      await axios.put('http://localhost:8000/api/settings', settings);
+      await axios.put('/api/settings', settings);
       setMessage({ type: 'success', text: 'Settings saved!' });
       setTimeout(() => setMessage(null), 3000);
     } catch (error) {

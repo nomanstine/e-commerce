@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// In-memory storage (should match the one in the main products route)
-let products: any[] = [];
+import api from '@/lib/client';
 
 // GET /api/products/[id] - Fetch a single product
 export async function GET(
@@ -10,16 +8,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const product = products.find(p => p.id === id);
-    
-    if (!product) {
-      return NextResponse.json(
-        { error: 'Product not found' },
-        { status: 404 }
-      );
-    }
-    
-    return NextResponse.json(product, { status: 200 });
+    const response = await api.get(`/api/products/${id}`);
+    return NextResponse.json(response.data, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to fetch product' },
@@ -36,23 +26,8 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const index = products.findIndex(p => p.id === id);
-    
-    if (index === -1) {
-      return NextResponse.json(
-        { error: 'Product not found' },
-        { status: 404 }
-      );
-    }
-    
-    products[index] = {
-      ...products[index],
-      ...body,
-      id,
-      updatedAt: new Date().toISOString(),
-    };
-    
-    return NextResponse.json(products[index], { status: 200 });
+    const response = await api.put(`/api/products/${id}`, body);
+    return NextResponse.json(response.data, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to update product' },
@@ -68,17 +43,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const index = products.findIndex(p => p.id === id);
-    
-    if (index === -1) {
-      return NextResponse.json(
-        { error: 'Product not found' },
-        { status: 404 }
-      );
-    }
-    
-    products.splice(index, 1);
-    
+    await api.delete(`/api/products/${id}`);
     return NextResponse.json(
       { message: 'Product deleted successfully' },
       { status: 200 }

@@ -29,7 +29,7 @@ export default function SettingsDisplay({ compact = false }: SettingsDisplayProp
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/settings');
+        const response = await axios.get('/api/settings');
         setSettings(response.data);
       } catch (error) {
         console.error('Error fetching settings:', error);

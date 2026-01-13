@@ -51,7 +51,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8000/api/products/${id}`);
+      const response = await axios.get(`/api/products/${id}`);
       setProduct(response.data);
       setError(null);
     } catch (error) {
@@ -64,7 +64,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
   const fetchReviews = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/products/${id}/reviews`);
+      const response = await axios.get(`/api/products/${id}/reviews`);
       setReviews(response.data);
     } catch (error) {
       console.error('Error fetching reviews:', error);

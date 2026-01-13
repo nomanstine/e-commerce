@@ -99,7 +99,7 @@ export default function ProductUpload() {
       };
 
       // Post to backend API
-      await axios.post('http://localhost:8000/api/products', productData);
+      await axios.post('/api/products', productData);
       
       setMessage({ type: 'success', text: 'Product uploaded successfully!' });
       

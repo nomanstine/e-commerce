@@ -48,8 +48,8 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [productsResponse, settingsResponse] = await Promise.all([
-          axios.get('http://localhost:8000/api/products'),
-          axios.get('http://localhost:8000/api/settings')
+          axios.get('/api/products'),
+          axios.get('/api/settings')
         ]);
         setFeaturedProducts(productsResponse.data.slice(0, 6)); // Get first 6 products
         setSettings(settingsResponse.data);
