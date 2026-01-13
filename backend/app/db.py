@@ -1,7 +1,7 @@
 import os
 from sqlmodel import SQLModel, create_engine, Session, select
 from dotenv import load_dotenv
-from .models import SettingsDB, Product, Review
+from models import SettingsDB, Product, Review
 from datetime import datetime
 
 load_dotenv()
