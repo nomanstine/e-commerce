@@ -1,5 +1,5 @@
 [project]
-name = "karukotha-backend"
+name = "karukotha"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -10,3 +10,5 @@ dependencies = [
     "mangum>=0.17.0",
     "sqlmodel>=0.0.31",
 ]
+[tool.setuptools]
+packages = ["app"]
