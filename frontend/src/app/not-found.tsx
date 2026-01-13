@@ -7,13 +7,13 @@ export default function NotFound() {
         <div className="mb-6">
           <div className="text-8xl mb-4">🔍</div>
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-amber-900 mb-2">
-            404
+            Oops!
           </h1>
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-            Page Not Found
+            We couldn&apos;t find that page
           </h2>
           <p className="text-gray-600">
-            The page you&apos;re looking for doesn&apos;t exist or has been moved.
+            But don&apos;t worry, let&apos;s get you back to exploring our beautiful collection of heritage crafts.
           </p>
         </div>
 
