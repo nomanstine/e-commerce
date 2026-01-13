@@ -2,12 +2,44 @@ from sqlmodel import SQLModel, Field
 from typing import List, Optional, Dict
 from datetime import datetime
 
+# Simplified Product schema for Category responses (to avoid circular references)
+class ProductSummary(SQLModel):
+    id: int
+    name: str
+    price: float
+    images: List[str] = []
+    sku: str
+    in_stock: bool = True
+
+# Category Schemas
+class CategoryBase(SQLModel):
+    name: str
+    description: Optional[str] = None
+    slug: Optional[str] = None
+
+
+class CategoryCreate(CategoryBase):
+    pass
+
+
+class CategoryUpdate(SQLModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    slug: Optional[str] = None
+
+
+class CategoryResponse(CategoryBase):
+    id: int
+    parent_id: Optional[int] = None
+    # products: List[ProductSummary] = []
+
+
 # Product Schemas
 class ProductBase(SQLModel):
     name: str
     description: str
     price: float = Field(gt=0)
-    category: str
+    category_ids: List[int] = []
     stock: int = Field(ge=0)
     sku: str
     brand: Optional[str] = None
@@ -27,7 +59,7 @@ class ProductUpdate(SQLModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = Field(default=None, gt=0)
-    category: Optional[str] = None
+    category_ids: Optional[List[int]] = None
     stock: Optional[int] = Field(default=None, ge=0)
     sku: Optional[str] = None
     brand: Optional[str] = None
@@ -41,7 +73,6 @@ class ProductUpdate(SQLModel):
     shipping: Optional[Dict] = None
 
 
-
 class ProductResponse(ProductBase):
     id: int
     images: List[str] = []
@@ -51,6 +82,7 @@ class ProductResponse(ProductBase):
     shipping: Dict = {}
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
+    categories: List[CategoryResponse] = []
 
 
 # Review Schemas

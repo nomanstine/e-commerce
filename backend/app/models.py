@@ -1,14 +1,17 @@
-from sqlmodel import SQLModel, Field, Column
+from sqlmodel import SQLModel, Field, Column, Relationship
 from sqlalchemy import JSON
 from typing import List, Optional, Dict
 from datetime import datetime
+
+class ProductCategoryLink(SQLModel, table=True):
+    product_id: int = Field(foreign_key="product.id", primary_key=True)
+    category_id: int = Field(foreign_key="category.id", primary_key=True)
 
 class Product(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     description: str
     price: float
-    category: str
     stock: int
     images: List[str] = Field(default_factory=list, sa_column=Column(JSON))
     sku: str = Field(unique=True)
@@ -21,6 +24,25 @@ class Product(SQLModel, table=True):
     shipping: Dict = Field(default_factory=dict, sa_column=Column(JSON))
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
+    
+    # Many-to-many relationship with Category
+    categories: List["Category"] = Relationship(
+        back_populates="products", 
+        link_model=ProductCategoryLink
+    )
+
+class Category(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    description: Optional[str] = None
+    slug: Optional[str] = None
+    parent_id: Optional[int] = Field(default=None, foreign_key="category.id")
+    
+    # Many-to-many relationship with Product
+    products: List[Product] = Relationship(
+        back_populates="categories", 
+        link_model=ProductCategoryLink
+    )
 
 class SettingsDB(SQLModel, table=True):
     __tablename__ = "settings"

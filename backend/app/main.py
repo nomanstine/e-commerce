@@ -9,7 +9,7 @@ import json
 import os
 
 from models import Product, Review, SettingsDB
-from routers import products, reviews, settings
+from routers import products, reviews, settings, categories
 
 from dotenv import load_dotenv
 
@@ -28,6 +28,7 @@ app.add_middleware(
 app.include_router(products.router, prefix="/api/products", tags=["products"])
 app.include_router(reviews.router, tags=["reviews"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
+app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
 
 
 # Initialize database on startup
