@@ -6,10 +6,11 @@ let products: any[] = [];
 // GET /api/products/[id] - Fetch a single product
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const product = products.find(p => p.id === params.id);
+    const { id } = await params;
+    const product = products.find(p => p.id === id);
     
     if (!product) {
       return NextResponse.json(
@@ -30,11 +31,12 @@ export async function GET(
 // PUT /api/products/[id] - Update a product
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const index = products.findIndex(p => p.id === params.id);
+    const index = products.findIndex(p => p.id === id);
     
     if (index === -1) {
       return NextResponse.json(
@@ -46,7 +48,7 @@ export async function PUT(
     products[index] = {
       ...products[index],
       ...body,
-      id: params.id,
+      id,
       updatedAt: new Date().toISOString(),
     };
     
@@ -62,10 +64,11 @@ export async function PUT(
 // DELETE /api/products/[id] - Delete a product
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const index = products.findIndex(p => p.id === params.id);
+    const { id } = await params;
+    const index = products.findIndex(p => p.id === id);
     
     if (index === -1) {
       return NextResponse.json(
