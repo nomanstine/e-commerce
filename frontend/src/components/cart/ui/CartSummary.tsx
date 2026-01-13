@@ -91,16 +91,13 @@ export default function CartSummary() {
       </div>
 
       <div className="mt-8 space-y-3">
-        <Button
-          className="w-full bg-amber-900 hover:bg-amber-800 text-white py-3 text-lg font-semibold"
-          disabled={state.items.length === 0}
-        >
+        <Button className="w-full">
           Proceed to Checkout
         </Button>
 
         <Button
           variant="outline"
-          className="w-full border-amber-200 text-amber-900 hover:bg-amber-50 py-3"
+          className="w-full"
         >
           Continue Shopping
         </Button>

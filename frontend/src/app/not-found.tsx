@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
@@ -18,18 +19,16 @@ export default function NotFound() {
         </div>
 
         <div className="space-y-3">
-          <Link
-            href="/"
-            className="block w-full bg-amber-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-800 transition duration-200 shadow-lg"
-          >
-            Go Home
+          <Link href="/">
+            <Button className="w-full">
+              Go Home
+            </Button>
           </Link>
 
-          <Link
-            href="/shop"
-            className="block w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-200"
-          >
-            Browse Shop
+          <Link href="/shop">
+            <Button variant="outline" className="w-full">
+              Browse Shop
+            </Button>
           </Link>
         </div>
       </div>

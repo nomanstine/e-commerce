@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import ProductCard from '@/components/home/ui/ProductCard';
+import { Button } from '@/components/ui/button';
 
 interface Product {
   id: number;
@@ -57,8 +58,10 @@ export default function FeaturedProducts({ featuredProducts, loading }: Featured
           </div>
         )}
         <div className="text-center mt-8 sm:mt-12">
-          <Link href="/shop" className="inline-block bg-amber-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-800 transition shadow-lg text-sm sm:text-base">
-            View All Products
+          <Link href="/shop">
+            <Button>
+              View All Products
+            </Button>
           </Link>
         </div>
       </div>

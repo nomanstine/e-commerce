@@ -20,14 +20,14 @@ export default function EmptyCart() {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <Link href="/shop">
-          <Button className="bg-amber-900 hover:bg-amber-800 text-white px-8 py-3 flex items-center gap-2">
+          <Button>
             <span>Start Shopping</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
         </Link>
 
         <Link href="/categories">
-          <Button variant="outline" className="border-amber-200 text-amber-900 hover:bg-amber-50 px-8 py-3">
+          <Button variant="outline">
             Browse Categories
           </Button>
         </Link>

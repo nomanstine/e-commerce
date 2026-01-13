@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Heart, ShoppingCart, Star, Check, Minus, Plus } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { Button } from '@/components/ui/button';
 
 interface Product {
   id: string;
@@ -121,17 +122,14 @@ export default function ProductInfo({ product, rating, reviewCount }: ProductInf
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-        <button
-          onClick={handleAddToCart}
-          className="flex-1 bg-amber-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-800 transition shadow-lg flex items-center justify-center space-x-2"
-        >
+        <Button onClick={handleAddToCart} className="flex-1">
           <ShoppingCart className="w-5 h-5" />
           <span>Add to Cart</span>
-        </button>
-        <button className="bg-white text-amber-900 border-2 border-amber-900 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-50 transition flex items-center justify-center space-x-2">
+        </Button>
+        <Button variant="outline" className="flex-1">
           <Heart className="w-5 h-5" />
           <span className="hidden sm:inline">Wishlist</span>
-        </button>
+        </Button>
       </div>
 
       {/* Buy Now Button */}

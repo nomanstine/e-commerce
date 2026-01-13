@@ -50,7 +50,7 @@ export default function CartItem({ item }: CartItemProps) {
           variant="outline"
           size="sm"
           onClick={() => handleQuantityChange(item.quantity - 1)}
-          className="h-8 w-8 p-0 border-amber-200 hover:bg-amber-50"
+          className="h-8 w-8 p-0"
         >
           <Minus className="w-4 h-4" />
         </Button>
@@ -59,7 +59,7 @@ export default function CartItem({ item }: CartItemProps) {
           variant="outline"
           size="sm"
           onClick={() => handleQuantityChange(item.quantity + 1)}
-          className="h-8 w-8 p-0 border-amber-200 hover:bg-amber-50"
+          className="h-8 w-8 p-0"
         >
           <Plus className="w-4 h-4" />
         </Button>

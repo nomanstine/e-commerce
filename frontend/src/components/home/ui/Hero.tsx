@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function Hero() {
   return (
@@ -23,11 +24,15 @@ export default function Hero() {
             Each item tells a story of craftsmanship and tradition.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Link href="/shop" className="bg-amber-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-800 transition shadow-lg hover:shadow-xl text-center">
-              Explore Collection
+            <Link href="/shop">
+              <Button>
+                Explore Collection
+              </Button>
             </Link>
-            <Link href="/about" className="bg-white text-amber-900 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-gray-50 transition shadow-lg border-2 border-amber-900 text-center">
-              Learn More
+            <Link href="/about">
+              <Button variant="outline">
+                Learn More
+              </Button>
             </Link>
           </div>
         </div>

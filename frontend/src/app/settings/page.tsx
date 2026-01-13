@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Settings {
   id: number;
@@ -162,11 +163,10 @@ export default function SettingsPage() {
           {/* Admin Link */}
           <div className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-xl p-6 text-center">
             <p className="text-gray-700 mb-4">Need to update these settings?</p>
-            <Link 
-              href="/dashboard" 
-              className="inline-block bg-amber-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-800 transition"
-            >
-              Go to Admin Dashboard
+            <Link href="/dashboard">
+              <Button>
+                Go to Admin Dashboard
+              </Button>
             </Link>
           </div>
         </div>

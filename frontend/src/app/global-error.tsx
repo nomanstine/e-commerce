@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function GlobalError({
   error,
@@ -31,18 +32,14 @@ export default function GlobalError({
             </div>
 
             <div className="space-y-3">
-              <button
-                onClick={() => reset()}
-                className="w-full bg-amber-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-800 transition duration-200 shadow-lg"
-              >
+              <Button onClick={() => reset()} className="w-full">
                 Try Again
-              </button>
+              </Button>
 
-              <Link
-                href="/"
-                className="block w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-200"
-              >
-                Go Home
+              <Link href="/">
+                <Button variant="outline" className="w-full">
+                  Go Home
+                </Button>
               </Link>
             </div>
 

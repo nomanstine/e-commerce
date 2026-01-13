@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Star, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Review {
   id: number;
@@ -137,9 +138,9 @@ export default function ProductTabs({
                 </div>
                 <p className="text-xs sm:text-sm text-gray-600 mt-1">Based on {reviewCount} reviews</p>
               </div>
-              <button className="bg-amber-900 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-amber-800 transition text-sm sm:text-base">
+              <Button>
                 Write a Review
-              </button>
+              </Button>
             </div>
 
             {/* Individual Reviews */}
