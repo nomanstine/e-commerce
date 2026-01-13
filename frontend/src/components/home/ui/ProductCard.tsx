@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Heart, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/lib/cart-context';
 
 interface Product {
   id: number;
@@ -11,6 +12,21 @@ interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+  const { dispatch } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        id: product.id.toString(),
+        name: product.name,
+        price: product.price,
+        image: product.image,
+      },
+    });
+    // Could add a toast notification here
+  };
   return (
     <div className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
       {/* Badge */}
@@ -33,7 +49,10 @@ export default function ProductCard({ product }: { product: Product }) {
           <button className="bg-white text-amber-900 p-2 sm:p-3 rounded-full hover:bg-amber-100 transition transform hover:scale-110">
             <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
-          <button className="bg-amber-900 text-white p-2 sm:p-3 rounded-full hover:bg-amber-800 transition transform hover:scale-110">
+          <button
+            onClick={handleAddToCart}
+            className="bg-amber-900 text-white p-2 sm:p-3 rounded-full hover:bg-amber-800 transition transform hover:scale-110"
+          >
             <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>

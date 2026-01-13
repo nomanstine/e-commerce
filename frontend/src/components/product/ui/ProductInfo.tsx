@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Heart, ShoppingCart, Star, Check, Minus, Plus } from 'lucide-react';
+import { useCart } from '@/lib/cart-context';
 
 interface Product {
   id: string;
@@ -23,6 +24,20 @@ interface ProductInfoProps {
 
 export default function ProductInfo({ product, rating, reviewCount }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
+  const { dispatch } = useCart();
+
+  const handleAddToCart = () => {
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0] || '/placeholder.jpg',
+      },
+    });
+    // Could add a toast notification here
+  };
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -106,7 +121,10 @@ export default function ProductInfo({ product, rating, reviewCount }: ProductInf
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-        <button className="flex-1 bg-amber-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-800 transition shadow-lg flex items-center justify-center space-x-2">
+        <button
+          onClick={handleAddToCart}
+          className="flex-1 bg-amber-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-amber-800 transition shadow-lg flex items-center justify-center space-x-2"
+        >
           <ShoppingCart className="w-5 h-5" />
           <span>Add to Cart</span>
         </button>

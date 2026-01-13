@@ -1,6 +1,7 @@
 'use client';
 
 import { Header, Footer } from "@/components/home";
+import { CartProvider } from "@/lib/cart-context";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -40,10 +41,10 @@ export default function LayoutContent({ children }: LayoutContentProps) {
   }, []);
 
   return (
-    <>
+    <CartProvider>
       <Header settings={settings} />
       {children}
       <Footer settings={settings} />
-    </>
+    </CartProvider>
   );
 }
