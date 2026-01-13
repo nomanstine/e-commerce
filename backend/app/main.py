@@ -30,6 +30,9 @@ app.include_router(products.router, prefix="/api/products", tags=["products"])
 app.include_router(reviews.router, tags=["reviews"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 
+# Initialize database
+init_db()
+
 def init_db():
     """Initialize database tables"""
     SQLModel.metadata.create_all(engine)
