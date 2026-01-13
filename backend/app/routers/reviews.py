@@ -3,9 +3,9 @@ from sqlmodel import Session, select
 from typing import List
 from datetime import datetime
 
-from db import get_session
-from models import Product, Review
-from schemas import ReviewResponse, ReviewCreate
+from ..db import get_session
+from ..models import Product, Review
+from ..schemas import ReviewResponse, ReviewCreate
 
 
 router = APIRouter()

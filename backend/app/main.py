@@ -2,14 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from sqlmodel import SQLModel, Session, select
-from db import engine
+from .db import engine
 
 from datetime import datetime
 import json
 import os
 
-from models import Product, Review, SettingsDB
-from routers import products, reviews, settings
+from .models import Product, Review, SettingsDB
+from .routers import products, reviews, settings
 
 from dotenv import load_dotenv
 
@@ -25,9 +25,9 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(products.router, prefix="/api/products", tags=["products"])
-app.include_router(reviews.router, tags=["reviews"])
-app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
+app.include_router(products, prefix="/api/products", tags=["products"])
+app.include_router(reviews, tags=["reviews"])
+app.include_router(settings, prefix="/api/settings", tags=["settings"])
 
 def init_db():
     """Initialize database tables"""
