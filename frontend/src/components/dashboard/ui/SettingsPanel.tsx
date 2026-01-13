@@ -20,13 +20,13 @@ interface Settings {
 
 export default function SettingsPanel() {
   const [settings, setSettings] = useState<Settings>({
-    storeName: 'Heritage Treasures',
+    storeName: 'karukotha',
     storeDescription: 'Timeless Elegance from Bangladesh',
     currency: 'BDT',
     taxRate: '0',
     shippingFee: '100',
     freeShippingThreshold: '5000',
-    contactEmail: 'contact@heritagetreasures.com',
+    contactEmail: 'contact@karukotha.com',
     contactPhone: '',
     storeAddress: '',
     returnPolicy: '',

@@ -28,7 +28,7 @@ export default function AdminDashboard() {
                 <h1 className="text-xl font-serif font-bold">
                   Admin Panel
                 </h1>
-                <p className="text-xs text-amber-200">Heritage Treasures</p>
+                <p className="text-xs text-amber-200">karukotha</p>
               </div>
             </div>
             <nav className="space-y-2">

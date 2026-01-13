@@ -33,7 +33,7 @@ export default function Header({ settings }: HeaderProps) {
           <div className="flex items-center space-x-1.5 sm:space-x-2">
             <div className="text-2xl sm:text-3xl font-serif">⚜️</div>
             <div>
-              <h1 className="text-base sm:text-xl md:text-2xl font-serif font-bold tracking-wide">{settings?.store_name || 'Heritage Treasures'}</h1>
+              <h1 className="text-base sm:text-xl md:text-2xl font-serif font-bold tracking-wide">{settings?.store_name || 'karukotha'}</h1>
               <p className="text-[10px] sm:text-xs text-amber-200 hidden sm:block">{settings?.store_description || 'Timeless Elegance from Bangladesh'}</p>
             </div>
           </div>

@@ -13,12 +13,13 @@ from routers import products, reviews, settings
 
 from dotenv import load_dotenv
 
-app = FastAPI(title="E-Commerce API")
+app = FastAPI(title="karukotha")
 
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],  # Next.js dev server
+    # allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],  # Next.js dev server
+    allow_origins=["*"],  # Allow all origins temporarily for debugging
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -38,13 +39,13 @@ def init_db():
         settings = session.exec(select(SettingsDB)).first()
         if not settings:
             default_settings = SettingsDB(
-                store_name="Heritage Treasures",
+                store_name="karukotha",
                 store_description="Timeless Elegance from Bangladesh",
                 currency="BDT",
                 tax_rate=0.0,
                 shipping_fee=100.0,
                 free_shipping_threshold=5000.0,
-                contact_email="contact@heritagetreasures.com"
+                contact_email="contact@karukotha.com"
             )
             session.add(default_settings)
             session.commit()

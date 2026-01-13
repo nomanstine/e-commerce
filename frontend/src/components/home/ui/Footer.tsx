@@ -27,8 +27,8 @@ export default function Footer({ settings }: FooterProps) {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
           <div>
-            <h3 className="text-lg sm:text-xl font-serif font-bold mb-3 sm:mb-4">{settings?.store_name || 'Heritage Treasures'}</h3>
-            <p className="text-amber-200 text-xs sm:text-sm">{settings?.store_description || 'Preserving Bangladesh\'s cultural heritage, one antique at a time.'}</p>
+            <h3 className="text-lg sm:text-xl font-serif font-bold mb-3 sm:mb-4">{settings?.store_name || 'karukotha'}</h3>
+            <p className="text-amber-200 text-xs sm:text-sm">{settings?.store_description || 'Timeless Elegance from Bangladesh'}</p>
           </div>
           <div>
             <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Quick Links</h4>
@@ -53,12 +53,12 @@ export default function Footer({ settings }: FooterProps) {
             <ul className="space-y-2 text-xs sm:text-sm text-amber-200">
               {settings?.store_address && <li>📍 {settings.store_address}</li>}
               {settings?.contact_phone && <li>📞 {settings.contact_phone}</li>}
-              <li>📧 {settings?.contact_email || 'info@heritagetreasures.bd'}</li>
+              <li>📧 {settings?.contact_email || 'info@karukotha.com'}</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-amber-700 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-amber-200">
-          <p>&copy; 2026 {settings?.store_name || 'Heritage Treasures'}. All rights reserved. | Proudly Made in Bangladesh 🇧🇩</p>
+          <p>&copy; 2026 {settings?.store_name || 'karukotha'}. All rights reserved. | Proudly Made in Bangladesh 🇧🇩</p>
         </div>
       </div>
     </footer>
